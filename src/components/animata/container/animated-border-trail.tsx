@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import 'react';
+import "react";
 
 interface AnimatedTrailProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -14,10 +14,10 @@ interface AnimatedTrailProps extends React.HTMLAttributes<HTMLDivElement> {
   trailSize?: "sm" | "md" | "lg";
 }
 
-declare module 'react' {
-    interface CSSProperties {
-        [key: `--${string}`]: string | number
-    }
+declare module "react" {
+  interface CSSProperties {
+    [key: `--${string}`]: string | number;
+  }
 }
 const sizes = {
   sm: 5,

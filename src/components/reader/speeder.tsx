@@ -40,14 +40,22 @@ const Speeder = ({ input }: { input: string }) => {
   const wordIndex = useRef<number>(0);
   const [progress, setProgress] = useState<number>(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [countdown, setCountdown] = useState<number>(3);
+  const [isCountingDown, setIsCountingDown] = useState(true);
 
   const reset = () => {
     setIsPlaying(true);
+    setIsCountingDown(true);
+    setCountdown(3);
     wordIndex.current = 0;
-    setCurrentWord("");
+    setCurrentWord(" ");
   };
   const tokens = useMemo<string[]>(() => {
-    const tokens = tokenize(input).map(word => word.trim());
+    const tokens = tokenize(input)
+      .map(word => word.trim())
+      .filter(token => {
+        return /[\p{Letter}\p{Mark}]/u.test(token);
+      });
     if (wordGroup === 1) {
       return tokens;
     }
@@ -57,25 +65,39 @@ const Speeder = ({ input }: { input: string }) => {
   }, [input, wordGroup]);
 
   useEffect(() => {
-    if (isPlaying) {
-      const speedMs = 60000 / speed; // Convert WPM to ms per word
+    if (isCountingDown && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(prev => prev - 1);
+      }, 1000);
 
-      intervalRef.current = setInterval(() => {
+      return () => clearTimeout(timer);
+    } else if (isCountingDown && countdown === 0) {
+      setIsCountingDown(false);
+      setIsPlaying(true);
+    }
+  }, [countdown, isCountingDown]);
+
+  useEffect(() => {
+    if (isPlaying && !isCountingDown) {
+      const speedMs = 60000 / speed;
+
+      const updateWord = () => {
         if (wordIndex.current >= tokens.length) {
           reset();
           return;
         }
-
         setCurrentWord(tokens[wordIndex.current]);
         setProgress(Math.ceil((wordIndex.current / tokens.length) * 100));
         wordIndex.current++;
-      }, speedMs);
+      };
+
+      intervalRef.current = setInterval(updateWord, speedMs);
     }
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isPlaying, speed, tokens]);
+  }, [isPlaying, speed, tokens, isCountingDown]);
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.code === "Space") {
@@ -97,7 +119,11 @@ const Speeder = ({ input }: { input: string }) => {
         <div>
           <ProgressWithValue position="none" value={progress} />
           <div className="mt-4 lg:text-6xl text-4xl font-bold text-center rounded-lg lg:p-16 p-8 bg-slate-50 text-slate-800 will-change-[opacity] backface-hidden">
-            {currentWord}
+            {isCountingDown ? (
+              <div className="text-blue-500">{countdown}</div>
+            ) : (
+              currentWord
+            )}
           </div>
         </div>
 
@@ -175,7 +201,11 @@ const Speeder = ({ input }: { input: string }) => {
               {isPlaying && (
                 <>
                   <span className="text-gray-500">Spacebar để ngừng</span>
-                  <Button variant="secondary" size="icon" onClick={() => setIsPlaying(false)}>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={() => setIsPlaying(false)}
+                  >
                     <PauseIcon />
                   </Button>
                 </>
@@ -183,7 +213,11 @@ const Speeder = ({ input }: { input: string }) => {
               {!isPlaying && (
                 <>
                   <span className="text-blue-500">Spacebar để tiếp tục</span>
-                  <Button variant="secondary" size="icon" onClick={() => setIsPlaying(true)}>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    onClick={() => setIsPlaying(true)}
+                  >
                     <PlayIcon />
                   </Button>
                 </>

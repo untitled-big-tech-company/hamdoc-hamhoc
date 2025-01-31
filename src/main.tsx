@@ -4,15 +4,18 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./app/Home";
 import Input from "./app/Input";
 import { Sample } from "./app/Sample";
+import { ThemeProvider } from "./components/theme-provider";
 import "./main.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/read/lang-le-sa-pa" element={<Sample />} />
-        <Route path="/read/input" element={<Input />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/read/lang-le-sa-pa" element={<Sample />} />
+          <Route path="/read/input" element={<Input />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>
 );
