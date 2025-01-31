@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SAMPLE_TEXT } from "@/registry/sample-text";
 import {
   ArrowLeftIcon,
   GaugeIcon,
@@ -28,6 +27,9 @@ import Dot from "../animata/background/dot";
 import AnimatedBorderTrail from "../animata/container/animated-border-trail";
 import { Button } from "../ui/button";
 import { ProgressWithValue } from "../ui/progress";
+const tokenize = (text: string) => {
+  return text.match(/[\p{Letter}\p{Mark}'-.,!?;:%—()"']+/gu) || [];
+};
 const speedOptions = [100, 200, 300, 400, 500, 600];
 const wordGroups = [1, 2, 3, 4];
 const Speeder = ({ input }: { input: string }) => {
@@ -45,11 +47,7 @@ const Speeder = ({ input }: { input: string }) => {
     setCurrentWord("");
   };
   const tokens = useMemo<string[]>(() => {
-    const text = input.length === 0 ? SAMPLE_TEXT : input;
-    const segmenter = new Intl.Segmenter("vi", { granularity: "word" });
-    const tokens = [...segmenter.segment(text)]
-      .filter(s => s.isWordLike)
-      .map(s => s.segment);
+    const tokens = tokenize(input).map(word => word.trim());
     if (wordGroup === 1) {
       return tokens;
     }
@@ -177,7 +175,7 @@ const Speeder = ({ input }: { input: string }) => {
               {isPlaying && (
                 <>
                   <span className="text-gray-500">Spacebar để ngừng</span>
-                  <Button variant="secondary" size="icon">
+                  <Button variant="secondary" size="icon" onClick={() => setIsPlaying(false)}>
                     <PauseIcon />
                   </Button>
                 </>
@@ -185,7 +183,7 @@ const Speeder = ({ input }: { input: string }) => {
               {!isPlaying && (
                 <>
                   <span className="text-blue-500">Spacebar để tiếp tục</span>
-                  <Button variant="secondary" size="icon">
+                  <Button variant="secondary" size="icon" onClick={() => setIsPlaying(true)}>
                     <PlayIcon />
                   </Button>
                 </>

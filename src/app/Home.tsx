@@ -15,7 +15,12 @@ function Home() {
         >
           </nav>
       </header>
-      <main>
+      <main className="min-h-screen h-screen">
+        <div className="relative h-full isolate overflow-hidden bg-gradient-to-b from-indigo-100/20">
+        <div
+          aria-hidden="true"
+          className="absolute inset-y-0 right-1/3 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:-mr-80 lg:-mr-96"
+        />
         <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-56 px-6">
           <div className="text-center">
             <div className="bg-red-100/50 text-red-500 size-24 rounded-full inline-flex items-center justify-center">
@@ -54,6 +59,7 @@ function Home() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </main>
     </>
