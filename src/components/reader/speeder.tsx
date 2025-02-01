@@ -35,7 +35,7 @@ const tokenize = (text: string) => {
 const speedOptions = [100, 200, 300, 400, 500, 600];
 const wordGroups = [1, 2, 3, 4];
 const Speeder = ({ input }: { input: string }) => {
-  const [currentWord, setCurrentWord] = useState<string>(" ");
+  const [currentWord, setCurrentWord] = useState<string>("0");
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [speed, setSpeed] = useState<number>(400); // Words per minute
   const [wordGroup, setWordGroup] = useState<number>(1);
@@ -50,7 +50,7 @@ const Speeder = ({ input }: { input: string }) => {
     setIsCountingDown(true);
     setCountdown(3);
     wordIndex.current = 0;
-    setCurrentWord(" ");
+    setCurrentWord("0");
   };
   const tokens = useMemo<string[]>(() => {
     const tokens = tokenize(input)
