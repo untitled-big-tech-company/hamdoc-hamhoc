@@ -16,24 +16,26 @@ import {
 import {
   ArrowLeftIcon,
   GaugeIcon,
+  MoonIcon,
   PauseIcon,
   PlayIcon,
   RotateCcwIcon,
+  SunIcon,
   WholeWordIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router";
-import Dot from "../animata/background/dot";
 import AnimatedBorderTrail from "../animata/container/animated-border-trail";
+import { useTheme } from "../theme-provider";
 import { Button } from "../ui/button";
-import { ProgressWithValue } from "../ui/progress";
+import { Progress } from "../ui/progress";
 const tokenize = (text: string) => {
   return text.match(/[\p{Letter}\p{Mark}'-.,!?;:%—()"']+/gu) || [];
 };
 const speedOptions = [100, 200, 300, 400, 500, 600];
 const wordGroups = [1, 2, 3, 4];
 const Speeder = ({ input }: { input: string }) => {
-  const [currentWord, setCurrentWord] = useState<string>("");
+  const [currentWord, setCurrentWord] = useState<string>(" ");
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [speed, setSpeed] = useState<number>(400); // Words per minute
   const [wordGroup, setWordGroup] = useState<number>(1);
@@ -44,7 +46,7 @@ const Speeder = ({ input }: { input: string }) => {
   const [isCountingDown, setIsCountingDown] = useState(true);
 
   const reset = () => {
-    setIsPlaying(true);
+    setIsPlaying(false);
     setIsCountingDown(true);
     setCountdown(3);
     wordIndex.current = 0;
@@ -107,23 +109,26 @@ const Speeder = ({ input }: { input: string }) => {
     document.addEventListener("keydown", handleKeyPress);
     return () => document.removeEventListener("keydown", handleKeyPress);
   }, [isPlaying]);
-
+  const { toggleTheme } = useTheme();
   return (
-    <Dot
-      className="relative isolate min-h-screen"
-      // color="rgba(235, 231, 231, 0,7)"
-      size={1.5}
-      spacing={20}
-    >
+    <div>
+      <header className="absolute inset-x-0 top-0 z-50">
+        <nav
+          aria-label="Global"
+          className="flex items-center justify-end p-6 lg:px-8"
+        >
+          <Button variant="outline" size="icon" onClick={() => toggleTheme()}>
+            <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        </nav>
+      </header>
       <div className="container mx-auto lg:pt-20 pt-6 px-6">
         <div>
-          <ProgressWithValue position="none" value={progress} />
-          <div className="mt-4 lg:text-6xl text-4xl font-bold text-center rounded-lg lg:p-16 p-8 bg-slate-50 text-slate-800 will-change-[opacity] backface-hidden">
-            {isCountingDown ? (
-              <div className="text-blue-500">{countdown}</div>
-            ) : (
-              currentWord
-            )}
+          <Progress value={progress} />
+          <div className="mt-4 lg:text-6xl text-4xl font-bold text-center rounded-lg lg:p-16 p-8 bg-foreground/5 will-change-[opacity] backface-hidden">
+            <span className="min-h-8">{isCountingDown ? countdown : currentWord}</span>
           </div>
         </div>
 
@@ -226,7 +231,7 @@ const Speeder = ({ input }: { input: string }) => {
           </div>
         </div>
       </div>
-    </Dot>
+    </div>
   );
 };
 

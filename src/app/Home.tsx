@@ -1,34 +1,38 @@
+import { useTheme } from "@/components/theme-provider";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { BookTextIcon, MoveRightIcon } from "lucide-react";
+import { BookTextIcon, Moon, MoveRightIcon, Sun } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 function Home() {
   const [inputText, setInputText] = useState<string>("");
   const navigate = useNavigate();
+  const { toggleTheme } = useTheme();
   return (
     <>
       <header className="absolute inset-x-0 top-0 z-50">
         <nav
           aria-label="Global"
-          className="flex items-center justify-between p-6 lg:px-8"
-        ></nav>
+          className="flex items-center justify-end p-6 lg:px-8"
+        >
+          <Button variant="outline" size="icon" onClick={() => toggleTheme()}>
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+        </nav>
       </header>
       <main className="min-h-screen h-screen">
         <div className="relative h-full isolate overflow-hidden bg-gradient-to-b from-indigo-100/20">
-          <div
-            aria-hidden="true"
-            className="absolute inset-y-0 right-1/3 -z-10 -mr-96 w-[200%] origin-top-right skew-x-[-30deg] bg-white shadow-xl shadow-indigo-600/10 ring-1 ring-indigo-50 sm:-mr-80 lg:-mr-96"
-          />
-          <div className="mx-auto max-w-2xl py-16 sm:py-32 lg:py-56 px-6">
+          <div className="mx-auto max-w-2xl py-16 lg:py-48 px-6">
             <div className="text-center">
-              <div className="bg-red-100/50 text-red-500 size-24 rounded-full inline-flex items-center justify-center">
+              <div className="bg-red-50 border-red-300 border-3 text-red-500 size-24 rounded-full inline-flex items-center justify-center">
                 <BookTextIcon className="size-12" />
               </div>
-              <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl">
+              <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight sm:text-7xl">
                 Ham Đọc Ham Học
               </h1>
-              <p className="mt-4 md:mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8">
+              <p className="mt-4 md:mt-8 text-pretty text-lg font-medium sm:text-xl/8">
                 Tăng tốc độ đọc của bạn gấp 4 lần chỉ bằng một thao tác đơn giản
               </p>
               <div className="mt-4 lg:mt-10 lg:mx-20 flex items-center justify-center gap-x-6">
@@ -36,7 +40,6 @@ function Home() {
                   <Textarea
                     placeholder="Dán Văn Bản Bạn Cần Đọc Nhanh Vào Đây"
                     className="w-full"
-                    rows={6}
                     value={inputText}
                     onChange={e => setInputText(e.target.value)}
                   />

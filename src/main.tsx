@@ -8,7 +8,7 @@ import { ThemeProvider } from "./components/theme-provider";
 import "./main.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="dark" storageKey="hamdoc-hamhoc-settings">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
