@@ -32,7 +32,9 @@ import { Progress } from "../ui/progress";
 const tokenize = (text: string) => {
   return text.match(/[\p{Letter}\p{Mark}'-.,!?;:%—()"']+/gu) || [];
 };
-const speedOptions = [100, 200, 300, 400, 500, 600];
+const speedOptions = [
+  100, 200, 300, 400, 450, 500, 550, 600, 650, 700, 750, 800,
+];
 const wordGroups = [1, 2, 3, 4];
 const Speeder = ({ input }: { input: string }) => {
   const [currentWord, setCurrentWord] = useState<string>("0");
@@ -128,7 +130,9 @@ const Speeder = ({ input }: { input: string }) => {
         <div>
           <Progress value={progress} />
           <div className="mt-4 lg:text-6xl text-4xl font-bold text-center rounded-lg lg:p-16 p-8 bg-foreground/5 will-change-[opacity] backface-hidden">
-            <span className="min-h-8">{isCountingDown ? countdown : currentWord}</span>
+            <span className="min-h-8">
+              {isCountingDown ? countdown : currentWord}
+            </span>
           </div>
         </div>
 
