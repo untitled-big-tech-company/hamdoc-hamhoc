@@ -82,11 +82,11 @@ function Home() {
                 <Tabs defaultValue="input" className="w-full">
                   <TabsList className="grid w-full grid-cols-2">
                     <TabsTrigger value="input">
-                      <BookOpenCheckIcon className="mr-2" />
+                      <BookOpenCheckIcon className="mr-2 size-5" />
                       Input
                     </TabsTrigger>
                     <TabsTrigger value="file">
-                      <FileTextIcon className="mr-2" />
+                      <FileTextIcon className="mr-2 size-5" />
                       File
                     </TabsTrigger>
                   </TabsList>
